@@ -1,5 +1,5 @@
 // Builds every page from data.js into static HTML. Run: node tools/build.mjs
-import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -583,4 +583,11 @@ ${pages.filter((p) => p.path !== '404.html').map((p) => `  <url><loc>${site.url}
 </urlset>
 `);
 writeFileSync(join(ROOT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${site.url}/sitemap.xml\n`);
-console.log(`Built ${pages.length} pages · ${count} formulations`);
+// dist/ holds only what the site serves (deployed by Vercel, see vercel.json).
+const DIST = join(ROOT, 'dist');
+rmSync(DIST, { recursive: true, force: true });
+mkdirSync(DIST);
+for (const f of [...pages.map((p) => p.path), 'styles.css', 'main.js', 'process3d.js', 'favicon.ico', 'robots.txt', 'sitemap.xml']) cpSync(join(ROOT, f), join(DIST, f));
+cpSync(join(ROOT, 'assets'), join(DIST, 'assets'), { recursive: true, filter: (src) => !src.endsWith('.DS_Store') });
+
+console.log(`Built ${pages.length} pages · ${count} formulations → dist/`);

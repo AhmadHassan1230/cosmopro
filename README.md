@@ -7,4 +7,4 @@ A static site with no framework. GSAP, Lenis and Three.js are vendored in `asset
 - Preview locally with `python3 -m http.server 5300`, then open http://localhost:5300.
 - `styles.css` is the whole design system. `main.js` handles motion, the header, forms and the lightbox. `process3d.js` is the pinned serum story on the home page.
 - Flow videos go in `assets/video` (see MEDIA.md). They're picked up automatically on the next build.
-- To deploy, upload the folder as-is. `tools/`, `package.json`, `README.md` and `MEDIA.md` don't need to be public.
+- Deploy: the build also writes `dist/` with only the public files. Vercel runs `npm run build` and serves `dist/` (see `vercel.json`) on every push to `main`. For other hosts, upload the contents of `dist/`.
