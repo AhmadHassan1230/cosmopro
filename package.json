@@ -1,0 +1,9 @@
+{
+  "name": "cosmopro-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "serve": "python3 -m http.server 5300"
+  }
+}
